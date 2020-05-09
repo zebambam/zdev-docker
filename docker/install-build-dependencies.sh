@@ -1,6 +1,22 @@
 #!/bin/bash
 set -e
-cd /root/docker
+
+# usage: MOD=<module> install-build-dependencies.sh
+#  <module> is exactly one of:
+#    all
+#    zcashd
+#    lightwalletd
+#    librustzcash
+#    android
+#    params
+
+if [ "$MOD" = "" ]
+then
+  export MOD="all"
+fi
+
+if [ "$MOD" = "zcashd" ] || [ "$MOD" = "all" ] 
+then
 
 # Dependencies for zcashd
 # =================================================
@@ -10,6 +26,10 @@ apt-get install -y \
     zlib1g-dev wget curl bsdmainutils automake
 apt-get install -y python-pip
 pip install pyblake2
+
+fi
+if ["$MOD" = "lightwalletd" ] || [ "$MOD" = "all" ] 
+then
 
 # Dependencies for lightwalletd
 # =================================================
@@ -23,6 +43,10 @@ rm go.tar.gz
 echo 'export GOROOT=/usr/local/go' >> /root/.bashrc
 echo 'export PATH=/usr/local/go/bin:$PATH' >> /root/.bashrc
 
+fi
+if [ "$MOD" = "librustzcash" ] || [ "$MOD" = "all" ]
+then
+
 # Dependencies for librustzcash & Android rust build
 # =================================================
 
@@ -35,6 +59,10 @@ export PATH=/root/.cargo/bin:$PATH
 rustup target add armv7-linux-androideabi
 rustup target add aarch64-linux-android
 rustup target add i686-linux-android
+
+fi
+if [ "$MOD" = "android" ] || [ "$MOD" = "all" ]
+then
 
 # Dependencies for zcash-android-wallet-sdk
 # =================================================
@@ -72,6 +100,10 @@ yes no | head -n 1 | $ANDROID_HOME/tools/bin/avdmanager create avd -n zemu -k "s
 apt-get install -y tightvncserver
 echo 'export USER=root' >> /root/.bashrc
 
+fi
+if [ "$MOD" = "params" ] || [ "$MOD" = "all" ]
+then
+
 # Zcash Parameters
 # ===================================================
 git clone https://github.com/zcash/zcash.git
@@ -79,3 +111,5 @@ cd zcash
 ./zcutil/fetch-params.sh
 cd ..
 rm -rf zcash
+
+fi

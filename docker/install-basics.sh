@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-cd /root/docker
 
 # Update packages and set up the basics.
 sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list

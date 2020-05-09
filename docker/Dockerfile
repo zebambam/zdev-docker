@@ -1,6 +1,8 @@
 FROM ubuntu:18.04
 
 COPY * /root/docker/
+WORKDIR /root/docker
+
 RUN /root/docker/install-basics.sh
 RUN /root/docker/install-build-dependencies.sh
 
